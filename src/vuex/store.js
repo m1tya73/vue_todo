@@ -11,7 +11,9 @@ let store = new Vuex.Store({
   mutations: {
     SET_ITEMS_TO_STATE: (state, items) => {
       const data = localStorage.getItem('todos');
-      data ? state.items = JSON.parse(data) : state.items = items;
+      /*eslint-disable */
+        data ? state.items = JSON.parse(data) : state.items = items;
+        /* eslint-enable */
     },
     REMOVE_FROM_ITEM: (state, index) => {
       state.items.splice(index, 1);
