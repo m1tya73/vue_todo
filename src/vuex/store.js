@@ -1,45 +1,41 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import axios from 'axios'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
-let store = new Vuex.Store( {
-    state: {
-        items: []
+let store = new Vuex.Store({
+  state: {
+    items: []
+  },
+  mutations: {
+    SET_ITEMS_TO_STATE: (state, items) => {
+      const data = localStorage.getItem('todos');
+      data ? state.items = JSON.parse(data) : state.items = items;
     },
-    mutations: {
-        SET_ITEMS_TO_STATE: (state, items) => {
-            //state.items = items;
-            const data = localStorage.getItem('todos')
-            data ? state.items = JSON.parse(data) : state.items = items;
-        },
-        REMOVE_FROM_ITEM: (state, index) => {
-            state.items.splice(index, 1)
-        }
-    },
-    actions: {
-        GET_ITEMS_FROM_API({ commit }) {
-            return axios(process.env.VUE_APP_URL, {
-                method: "GET"
-            })
-                .then((items) => {
-                    commit('SET_ITEMS_TO_STATE', items.data);
-                    return items;
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
-        },
-        DELETE_FROM_ITEM({ commit }, index) {
-            commit('REMOVE_FROM_ITEM', index)
-        }
-    },
-    getters: {
-        ITEMS(state) {
-            return state.items;
-        }
+    REMOVE_FROM_ITEM: (state, index) => {
+      state.items.splice(index, 1);
     }
+  },
+  actions: {
+    GET_ITEMS_FROM_API({ commit }) {
+      return axios(process.env.VUE_APP_URL, {
+        method: 'GET'
+      })
+        .then((items) => {
+          commit('SET_ITEMS_TO_STATE', items.data);
+          return items;
+        });
+    },
+    DELETE_FROM_ITEM({ commit }, index) {
+      commit('REMOVE_FROM_ITEM', index);
+    }
+  },
+  getters: {
+    ITEMS(state) {
+      return state.items;
+    }
+  }
 });
 
 export default store;
